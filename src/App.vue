@@ -1,14 +1,39 @@
 <script setup lang="ts">
 
+import { ref } from 'vue';
+import FlexBoard from './components/FlexBoard.vue';
+import GridBoard from './components/GridBoard.vue';
+const boardIsFlex = ref(true);
+
 </script>
 
 <template>
   <header>
-    <h1 class="text-3xl text-center">Drag and Drop App</h1>
+    <h1 class="text-3xl text-center">
+      Drag and Drop App
+    </h1>
   </header>
 
   <main>
-
+    <div class="container mx-auto">
+      <div class="button-group min-h-10 my-3">
+        <button
+          class="btn btn-primary"
+          @click="boardIsFlex = !boardIsFlex"
+        >
+          <span v-if="boardIsFlex">Change to Grid</span>
+          <span v-else>Change to Flex</span>
+        </button>
+      </div>
+      <div class="container min-h-150 bg-gray-500">
+        <div v-if="boardIsFlex">
+          <FlexBoard />
+        </div>
+        <div v-else>
+          <GridBoard />
+        </div>
+      </div>
+    </div>
   </main>
 </template>
 

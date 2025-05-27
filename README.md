@@ -6,7 +6,8 @@ To Do
 
 * [x] add tailwind
 * [x] configure ESLint
-* [ ] setup a board using flex
-* [ ] setup a board using grid
+* [x] add DaisyUI
+* [x] setup a board using flex
+* [x] setup a board using grid
 * [ ] setup cards with data
 * [ ] setup drag and drop composable

@@ -4,6 +4,14 @@ import { ref } from 'vue';
 import FlexBoard from './components/FlexBoard.vue';
 import GridBoard from './components/GridBoard.vue';
 const boardIsFlex = ref(true);
+const tasks = ref([
+  { id: 1, title: 'Task 1', status: 'todo' },
+  { id: 2, title: 'Task 2', status: 'doing' },
+  { id: 3, title: 'Task 3', status: 'done' },
+  { id: 4, title: 'Task 4', status: 'todo' },
+  { id: 5, title: 'Task 5', status: 'doing' },
+  { id: 6, title: 'Task 6', status: 'done' }
+]);
 
 </script>
 
@@ -27,7 +35,7 @@ const boardIsFlex = ref(true);
       </div>
       <div class="container min-h-150 bg-gray-500">
         <div v-if="boardIsFlex">
-          <FlexBoard />
+          <FlexBoard :tasks="tasks" />
         </div>
         <div v-else>
           <GridBoard />

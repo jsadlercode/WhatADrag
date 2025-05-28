@@ -9,5 +9,5 @@ To Do
 * [x] add DaisyUI
 * [x] setup a board using flex
 * [x] setup a board using grid
-* [ ] setup cards with data
+* [x] setup cards with data
 * [ ] setup drag and drop composable

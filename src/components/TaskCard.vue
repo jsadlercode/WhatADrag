@@ -1,14 +1,11 @@
 <script setup lang="ts">
+import { useTaskDragEvents } from '../composables/useTaskDragEvents';
+import type { Task } from '../composables/useTaskManagement';
 
-interface Task {
-  id: number;
-  title: string;
-  status: string;
-  position: number;
-}
 const props = defineProps<{
   task: Task;
   isDraggedOver?: boolean;
+  isDragged?: boolean;
 }>();
 
 const emit = defineEmits<{
@@ -18,29 +15,13 @@ const emit = defineEmits<{
   dragLeave: [];
 }>();
 
-function handleDragStart(event: DragEvent) {
-  if (event.dataTransfer) {
-    event.dataTransfer.effectAllowed = 'move';
-    event.dataTransfer.setData('text/plain', JSON.stringify(props.task));
-  }
-  emit('dragStart', props.task);
-}
-
-function handleDragEnd() {
-  emit('dragEnd');
-}
-
-function handleDragOver(event: DragEvent) {
-  event.preventDefault();
-  //event.stopPropagation();
-  emit('dragOver', props.task);
-}
-
-function handleDragLeave(event: DragEvent) {
-  if (!event.currentTarget?.contains(event.relatedTarget as Node)) {
-    emit('dragLeave');
-  }
-}
+// Use the drag events composable
+const {
+  handleDragStart,
+  handleDragEnd,
+  handleDragOver,
+  handleDragLeave
+} = useTaskDragEvents(props.task, emit);
 
 </script>
 
@@ -48,11 +29,17 @@ function handleDragLeave(event: DragEvent) {
   <div>
     <div
       v-if="isDraggedOver"
-      class="h-2 bg-blue-400 rounded mx-4 mb-2 opacity-75"
-    />
+      class="w-96 h-24 bg-gradient-to-r from-blue-400 to-blue-600 rounded-lg mx-1 mb-2 opacity-90 shadow-lg border-2 border-blue-300 animate-pulse flex items-center justify-center"
+    >
+      <span class="text-white font-semibold">Drop here</span>
+    </div>
     <div
-      class="card w-96 bg-base-100 card-xs shadow-sm m-1"
-      :class="{ 'transform translate-y-2': isDraggedOver }"
+      class="card w-96 bg-base-100 card-xs shadow-sm m-1 transition-all duration-200"
+      :class="{
+        'transform translate-y-2': isDraggedOver,
+        'opacity-50 scale-95 rotate-2 shadow-2xl border-2 border-blue-400': isDragged,
+        'hover:shadow-md': !isDragged
+      }"
       draggable="true"
       @dragstart="handleDragStart"
       @dragend="handleDragEnd"

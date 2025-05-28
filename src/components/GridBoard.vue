@@ -1,7 +1,5 @@
 <script setup lang="ts">
-import TaskCard from './TaskCard.vue';
-
-
+// import TaskCard from './TaskCard.vue';
 
 </script>
 
@@ -17,7 +15,7 @@ import TaskCard from './TaskCard.vue';
           To Do
         </h3>
 
-        <TaskCard />
+        <!-- <TaskCard /> -->
       </div>
       <div
         class="bg-cyan-400 min-h-150 mx-2"

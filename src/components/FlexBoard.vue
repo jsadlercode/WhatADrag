@@ -1,13 +1,8 @@
 <script setup lang="ts">
 import TaskCard from './TaskCard.vue';
-import { computed, ref } from 'vue';
-
-interface Task {
-  id: number;
-  title: string;
-  status: string;
-  position: number;
-}
+import { computed } from 'vue';
+import { useDragAndDrop } from '../composables/useDragAndDrop';
+import type { Task } from '../composables/useTaskManagement';
 
 const props = defineProps<{
   tasks: Task[];
@@ -17,9 +12,20 @@ const emit = defineEmits<{
   updateTask: [task: Task, targetTask?: Task];
 }>();
 
-const draggedTask = ref<Task | null>(null);
-const draggedOverTask = ref<Task | null>(null);
-const draggedOverColumn = ref<string | null>(null);
+// Use drag and drop composable
+const {
+  draggedTask,
+  draggedOverTask,
+  draggedOverColumn,
+  handleDragStart,
+  handleDragEnd,
+  handleTaskDragOver,
+  handleTaskDragLeave,
+  handleColumnDragOver,
+  handleColumnDragLeave,
+  handleDrop
+} = useDragAndDrop();
+
 // Sort tasks by position within each status
 const todoTasks = computed(() =>
   props.tasks
@@ -37,68 +43,9 @@ const doneTasks = computed(() =>
     .sort((a, b) => a.position - b.position)
 );
 
-function handleDragStart(task: Task) {
-  draggedTask.value = task;
-  // Clear any existing drag over states
-  draggedOverTask.value = null;
-  draggedOverColumn.value = null;
-}
-
-function handleDragEnd() {
-  draggedTask.value = null;
-  draggedOverTask.value = null;
-  draggedOverColumn.value = null;
-}
-
-function handleTaskDragOver(task: Task) {
-  if (draggedTask.value && draggedTask.value.id !== task.id) {
-    draggedOverTask.value = task;
-    if (draggedTask.value.status !== task.status) {
-      draggedOverColumn.value = null;
-    }
-  }
-}
-
-function handleTaskDragLeave() {
-  // Add a small delay to prevent flickering when moving between card elements
-  setTimeout(() => {
-    draggedOverTask.value = null;
-  }, 10);
-}
-
-function handleColumnDragOver(event: DragEvent, status: string) {
-  event.preventDefault();
-  //if (draggedTask.value && draggedTask.value.status !== status) {
-    if (!draggedOverTask.value) {
-      draggedOverColumn.value = status;
-    }
- // }
-}
-
-function handleColumnDragLeave() {
-  // Add a small delay to prevent flickering
-  setTimeout(() => {
-    draggedOverColumn.value = null;
-  }, 10);
-}
-
-function handleDrop(event: DragEvent, status: string) {
-  event.preventDefault();
-
-  if (draggedTask.value) {
-    const updatedTask = { ...draggedTask.value, status };
-
-    // If dropping over another task, we need to handle positioning
-    if (draggedOverTask.value) {
-      // For now, just update the status. You could implement more complex positioning logic here
-      emit('updateTask', updatedTask, draggedOverTask.value);
-    } else {
-      // Dropping in empty space or at the end of a column
-      emit('updateTask', updatedTask);
-    }
-  }
-
-  handleDragEnd();
+// Wrapper function to emit updateTask
+function onUpdateTask(task: Task, targetTask?: Task) {
+  emit('updateTask', task, targetTask);
 }
 
 </script>
@@ -113,7 +60,7 @@ function handleDrop(event: DragEvent, status: string) {
         :class="{ 'bg-blue-100 border-blue-400': draggedOverColumn === 'todo' }"
         @dragover="handleColumnDragOver($event, 'todo')"
         @dragleave="handleColumnDragLeave"
-        @drop="handleDrop($event, 'todo')"
+        @drop="handleDrop($event, 'todo', onUpdateTask)"
       >
         <h3 class="text-2xl text-center mb-4">
           To Do
@@ -123,6 +70,7 @@ function handleDrop(event: DragEvent, status: string) {
           :key="task.id"
           :task="task"
           :is-dragged-over="draggedOverTask?.id === task.id"
+          :is-dragged="draggedTask?.id === task.id"
           @drag-start="handleDragStart"
           @drag-end="handleDragEnd"
           @drag-over="handleTaskDragOver"
@@ -131,8 +79,10 @@ function handleDrop(event: DragEvent, status: string) {
         <!-- Drop zone indicator for empty column or end of column -->
         <div
           v-if="draggedOverColumn === 'todo' && !draggedOverTask"
-          class="min-h-20 bg-amber-800 w-96 rounded-lg m-1"
-        />
+          class="w-96 h-24 bg-gradient-to-r from-amber-400 to-orange-500 rounded-lg mx-1 my-2 opacity-80 shadow-lg border-2 border-amber-300 animate-pulse flex items-center justify-center"
+        >
+          <span class="text-white font-semibold">Drop here</span>
+        </div>
       </div>
       <!-- Doing Column -->
       <div
@@ -140,7 +90,7 @@ function handleDrop(event: DragEvent, status: string) {
         :class="{ 'bg-blue-100 border-blue-400': draggedOverColumn === 'doing' }"
         @dragover="handleColumnDragOver($event, 'doing')"
         @dragleave="handleColumnDragLeave"
-        @drop="handleDrop($event, 'doing')"
+        @drop="handleDrop($event, 'doing', onUpdateTask)"
       >
         <h3 class="text-2xl text-center mb-4">
           Doing
@@ -150,6 +100,7 @@ function handleDrop(event: DragEvent, status: string) {
           :key="task.id"
           :task="task"
           :is-dragged-over="draggedOverTask?.id === task.id"
+          :is-dragged="draggedTask?.id === task.id"
           @drag-start="handleDragStart"
           @drag-end="handleDragEnd"
           @drag-over="handleTaskDragOver"
@@ -157,8 +108,10 @@ function handleDrop(event: DragEvent, status: string) {
         />
         <div
           v-if="draggedOverColumn === 'doing' && !draggedOverTask"
-          class="h-2 bg-blue-400 rounded mx-4 mt-2 opacity-75 w-full"
-        />
+          class="w-96 h-24 bg-gradient-to-r from-blue-400 to-blue-600 rounded-lg mx-1 my-2 opacity-80 shadow-lg border-2 border-blue-300 animate-pulse flex items-center justify-center"
+        >
+          <span class="text-white font-semibold">Drop here</span>
+        </div>
       </div>
       <!-- Done Column -->
       <div
@@ -166,7 +119,7 @@ function handleDrop(event: DragEvent, status: string) {
         :class="{ 'bg-blue-100 border-blue-400': draggedOverColumn === 'done' }"
         @dragover="handleColumnDragOver($event, 'done')"
         @dragleave="handleColumnDragLeave"
-        @drop="handleDrop($event, 'done')"
+        @drop="handleDrop($event, 'done', onUpdateTask)"
       >
         <h3 class="text-2xl text-center mb-4">
           Done
@@ -176,6 +129,7 @@ function handleDrop(event: DragEvent, status: string) {
           :key="task.id"
           :task="task"
           :is-dragged-over="draggedOverTask?.id === task.id"
+          :is-dragged="draggedTask?.id === task.id"
           @drag-start="handleDragStart"
           @drag-end="handleDragEnd"
           @drag-over="handleTaskDragOver"
@@ -183,8 +137,10 @@ function handleDrop(event: DragEvent, status: string) {
         />
         <div
           v-if="draggedOverColumn === 'done' && !draggedOverTask"
-          class="h-2 bg-blue-400 rounded mx-4 mt-2 opacity-75 w-full"
-        />
+          class="w-96 h-24 bg-gradient-to-r from-green-400 to-green-600 rounded-lg mx-1 my-2 opacity-80 shadow-lg border-2 border-green-300 animate-pulse flex items-center justify-center"
+        >
+          <span class="text-white font-semibold">Drop here</span>
+        </div>
       </div>
     </div>
   </div>

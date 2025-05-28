@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import TaskCard from './TaskCard.vue';
-import { computed } from 'vue';
+import TaskEditModal from './TaskEditModal.vue';
+import { computed, ref } from 'vue';
 import { useDragAndDrop } from '../composables/useDragAndDrop';
 import type { Task } from '../composables/useTaskManagement';
 
@@ -11,6 +12,10 @@ const props = defineProps<{
 const emit = defineEmits<{
   updateTask: [task: Task, targetTask?: Task];
 }>();
+
+// Modal state
+const isModalOpen = ref(false);
+const taskToEdit = ref<Task | null>(null);
 
 // Use drag and drop composable
 const {
@@ -48,6 +53,22 @@ function onUpdateTask(task: Task, targetTask?: Task) {
   emit('updateTask', task, targetTask);
 }
 
+// Modal handlers
+function handleEditTask(task: Task) {
+  taskToEdit.value = task;
+  isModalOpen.value = true;
+}
+
+function handleModalClose() {
+  isModalOpen.value = false;
+  taskToEdit.value = null;
+}
+
+function handleModalSave(updatedTask: Task) {
+  emit('updateTask', updatedTask);
+  handleModalClose();
+}
+
 </script>
 
 <template>
@@ -75,6 +96,7 @@ function onUpdateTask(task: Task, targetTask?: Task) {
           @drag-end="handleDragEnd"
           @drag-over="handleTaskDragOver"
           @drag-leave="handleTaskDragLeave"
+          @edit="handleEditTask"
         />
         <!-- Drop zone indicator for empty column or end of column -->
         <div
@@ -105,6 +127,7 @@ function onUpdateTask(task: Task, targetTask?: Task) {
           @drag-end="handleDragEnd"
           @drag-over="handleTaskDragOver"
           @drag-leave="handleTaskDragLeave"
+          @edit="handleEditTask"
         />
         <div
           v-if="draggedOverColumn === 'doing' && !draggedOverTask"
@@ -134,6 +157,7 @@ function onUpdateTask(task: Task, targetTask?: Task) {
           @drag-end="handleDragEnd"
           @drag-over="handleTaskDragOver"
           @drag-leave="handleTaskDragLeave"
+          @edit="handleEditTask"
         />
         <div
           v-if="draggedOverColumn === 'done' && !draggedOverTask"
@@ -143,5 +167,13 @@ function onUpdateTask(task: Task, targetTask?: Task) {
         </div>
       </div>
     </div>
+
+    <!-- Task Edit Modal -->
+    <TaskEditModal
+      :is-open="isModalOpen"
+      :task="taskToEdit"
+      @close="handleModalClose"
+      @save="handleModalSave"
+    />
   </div>
 </template>

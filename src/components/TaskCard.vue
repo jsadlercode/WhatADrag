@@ -13,6 +13,7 @@ const emit = defineEmits<{
   dragEnd: [];
   dragOver: [task: Task];
   dragLeave: [];
+  edit: [task: Task];
 }>();
 
 // Use the drag events composable
@@ -22,6 +23,10 @@ const {
   handleDragOver,
   handleDragLeave
 } = useTaskDragEvents(props.task, emit);
+
+function handleEdit() {
+  emit('edit', props.task);
+}
 
 </script>
 
@@ -51,7 +56,10 @@ const {
           {{ props.task.title }}
         </h2>
         <div class="justify-end card-actions">
-          <button class="btn btn-xs btn-primary">
+          <button
+            class="btn btn-xs btn-primary"
+            @click="handleEdit"
+          >
             Edit
           </button>
         </div>

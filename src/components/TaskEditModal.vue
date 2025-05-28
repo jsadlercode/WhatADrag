@@ -13,12 +13,14 @@ const emit = defineEmits<{
 }>();
 
 const title = ref('');
+const description = ref('');
 const status = ref('');
 
 // Watch for changes to the task prop to populate the form
 watch(() => props.task, (newTask) => {
   if (newTask) {
     title.value = newTask.title;
+    description.value = newTask.description;
     status.value = newTask.status;
   }
 }, { immediate: true });
@@ -28,6 +30,7 @@ function handleSave() {
     const updatedTask: Task = {
       ...props.task,
       title: title.value.trim(),
+      description: description.value.trim(),
       status: status.value
     };
     emit('save', updatedTask);
@@ -51,13 +54,13 @@ function handleBackdropClick(event: MouseEvent) {
     v-if="isOpen"
     class="modal modal-open"
   >
-    <div class="modal-box">
+    <div class="modal-box max-w-2xl w-full">
       <h3 class="font-bold text-lg">
         Edit Task
       </h3>
 
       <div class="py-4">
-        <div class="form-control w-full max-w-xs">
+        <div class="form-control w-full">
           <label class="label">
             <span class="label-text">Title</span>
           </label>
@@ -65,11 +68,21 @@ function handleBackdropClick(event: MouseEvent) {
             v-model="title"
             type="text"
             placeholder="Enter task title"
-            class="input input-bordered w-full max-w-xs"
+            class="input input-bordered w-full "
             @keyup.enter="handleSave"
           >
         </div>
-
+        <div class="form-control w-full">
+          <label class="label">
+            <span class="label-text">Description</span>
+          </label>
+          <textarea
+            v-model="description"
+            placeholder="Enter task description (optional)"
+            class="textarea textarea-bordered w-full"
+            rows="8"
+          />
+        </div>
         <div class="form-control w-full max-w-xs">
           <label class="label">
             <span class="label-text">Status</span>

@@ -9,12 +9,12 @@ const boardIsFlex = ref(true);
 
 // Initialize task management with sample data
 const { tasks, updateTask } = useTaskManagement([
-  { id: 1, title: 'Task 1', status: 'todo', position: 0 },
-  { id: 2, title: 'Task 2', status: 'doing', position: 0 },
-  { id: 3, title: 'Task 3', status: 'done', position: 0 },
-  { id: 4, title: 'Task 4', status: 'todo', position: 1 },
-  { id: 5, title: 'Task 5', status: 'doing', position: 1 },
-  { id: 6, title: 'Task 6', status: 'done', position: 1 }
+  { id: 1, title: 'Task 1', status: 'todo', position: 0, description: 'This is task 1' },
+  { id: 2, title: 'Task 2', status: 'doing', position: 0, description: 'This is task 2' },
+  { id: 3, title: 'Task 3', status: 'done', position: 0, description: 'This is task 3' },
+  { id: 4, title: 'Task 4', status: 'todo', position: 1, description: 'This is task 4' },
+  { id: 5, title: 'Task 5', status: 'doing', position: 1, description: 'This is task 5' },
+  { id: 6, title: 'Task 6', status: 'done', position: 1, description: 'This is task 6' }
 ]);
 
 </script>

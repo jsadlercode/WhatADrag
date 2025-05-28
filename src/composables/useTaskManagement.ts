@@ -3,6 +3,7 @@ import { ref, computed } from 'vue';
 export interface Task {
   id: number;
   title: string;
+  description: string;
   status: string;
   position: number;
 }

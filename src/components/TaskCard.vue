@@ -55,6 +55,12 @@ function handleEdit() {
         <h2 class="card-title">
           {{ props.task.title }}
         </h2>
+        <p
+          v-if="props.task.description"
+          class="text-xs truncate text-gray-600"
+        >
+          {{ props.task.description }}
+        </p>
         <div class="justify-end card-actions">
           <button
             class="btn btn-xs btn-primary"

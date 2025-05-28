@@ -45,7 +45,10 @@ const { tasks, updateTask } = useTaskManagement([
           />
         </div>
         <div v-else>
-          <GridBoard />
+          <GridBoard
+            :tasks="tasks"
+            @update-task="updateTask"
+          />
         </div>
       </div>
     </div>

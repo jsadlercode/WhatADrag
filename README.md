@@ -2,6 +2,8 @@
 
 Playing around with the HTML drag and drop API in Vue3.
 
+![Screenshot of WhatADrag!](./screen.jpeg "screenshot")
+
 To Do
 
 * [x] add tailwind

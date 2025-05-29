@@ -77,7 +77,7 @@ function handleModalSave(updatedTask: Task) {
       <!-- To Do Column -->
       <div
         class="basis-1/3 sm:w-66 md:w-66 max-w-106 flex-shrink-0 min-h-150 mx-2 border-dashed border-2 rounded-lg border-gray-700 flex flex-col items-center"
-        :class="{ 'bg-blue-100 border-blue-400': draggedOverColumn === 'todo' }"
+        :class="{ 'bg-gray-400 border-violet-400': draggedOverColumn === 'todo' }"
         @dragover="handleColumnDragOver($event, 'todo')"
         @dragleave="handleColumnDragLeave"
         @drop="handleDrop($event, 'todo', onUpdateTask)"
@@ -100,7 +100,7 @@ function handleModalSave(updatedTask: Task) {
         <!-- Drop zone indicator for empty column or end of column -->
         <div
           v-if="draggedOverColumn === 'todo' && !draggedOverTask"
-          class="w-96 h-24 bg-gradient-to-r from-amber-400 to-orange-500 rounded-lg mx-1 my-2 opacity-80 shadow-lg border-2 border-amber-300 animate-pulse flex items-center justify-center"
+          class="w-96 h-24 bg-gradient-to-r from-indigo-400 to-violet-600 rounded-lg mx-1 my-2 opacity-80 shadow-lg border-2 border-violet-300 animate-pulse flex items-center justify-center"
         >
           <span class="text-white font-semibold">Drop here</span>
         </div>
@@ -108,7 +108,7 @@ function handleModalSave(updatedTask: Task) {
       <!-- Doing Column -->
       <div
         class="basis-1/3 sm:w-66 md:w-66 max-w-106 flex-shrink-0 min-h-150 mx-2 border-dashed border-2 rounded-lg border-gray-700 flex flex-col items-center"
-        :class="{ 'bg-blue-100 border-blue-400': draggedOverColumn === 'doing' }"
+        :class="{ 'bg-gray-400 border-violet-400': draggedOverColumn === 'doing' }"
         @dragover="handleColumnDragOver($event, 'doing')"
         @dragleave="handleColumnDragLeave"
         @drop="handleDrop($event, 'doing', onUpdateTask)"
@@ -130,7 +130,7 @@ function handleModalSave(updatedTask: Task) {
         />
         <div
           v-if="draggedOverColumn === 'doing' && !draggedOverTask"
-          class="w-96 h-24 bg-gradient-to-r from-blue-400 to-blue-600 rounded-lg mx-1 my-2 opacity-80 shadow-lg border-2 border-blue-300 animate-pulse flex items-center justify-center"
+          class="w-96 h-24 bg-gradient-to-r from-indigo-400 to-violet-600 rounded-lg mx-1 my-2 opacity-80 shadow-lg border-2 border-violet-300 animate-pulse flex items-center justify-center"
         >
           <span class="text-white font-semibold">Drop here</span>
         </div>
@@ -138,7 +138,7 @@ function handleModalSave(updatedTask: Task) {
       <!-- Done Column -->
       <div
         class="basis-1/3 sm:w-66 md:w-66 max-w-106 flex-shrink-0 min-h-150 mx-2 border-dashed border-2 rounded-lg border-gray-700 flex flex-col items-center"
-        :class="{ 'bg-blue-100 border-blue-400': draggedOverColumn === 'done' }"
+        :class="{ 'bg-gray-400 border-violet-400': draggedOverColumn === 'done' }"
         @dragover="handleColumnDragOver($event, 'done')"
         @dragleave="handleColumnDragLeave"
         @drop="handleDrop($event, 'done', onUpdateTask)"
@@ -160,7 +160,7 @@ function handleModalSave(updatedTask: Task) {
         />
         <div
           v-if="draggedOverColumn === 'done' && !draggedOverTask"
-          class="w-96 h-24 bg-gradient-to-r from-green-400 to-green-600 rounded-lg mx-1 my-2 opacity-80 shadow-lg border-2 border-green-300 animate-pulse flex items-center justify-center"
+          class="w-96 h-24 bg-gradient-to-r from-indigo-400 to-violet-600 rounded-lg mx-1 my-2 opacity-80 shadow-lg border-2 border-violet-300 animate-pulse flex items-center justify-center"
         >
           <span class="text-white font-semibold">Drop here</span>
         </div>

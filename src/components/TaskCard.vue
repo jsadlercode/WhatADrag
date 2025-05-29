@@ -39,7 +39,7 @@ function handleEdit() {
       <span class="text-white font-semibold">Drop here</span>
     </div>
     <div
-      class="card w-96 bg-base-100 card-xs shadow-sm m-1 transition-all duration-200"
+      class="card w-96 sm:w-64 md:w-64 lg:w-64 xl:w-96 bg-base-300 card-xs shadow-sm shadow-violet-500/50 m-1 transition-all duration-200"
       :class="{
         'transform translate-y-2': isDraggedOver,
         'opacity-50 scale-95 rotate-2 shadow-2xl border-2 border-blue-400': isDragged,

@@ -73,11 +73,10 @@ function handleModalSave(updatedTask: Task) {
 
 <template>
   <div>
-    Flex Board Component
-    <div class="flex flex-row p-4">
+    <div class="flex flex-row p-1 sm:p-2 md:p-4 overflow-x-auto min-w-max justify-center">
       <!-- To Do Column -->
       <div
-        class="basis-1/3 min-h-150 mx-2 border-dashed border-2 rounded-lg border-gray-700 flex flex-col items-center"
+        class="basis-1/3 sm:w-66 md:w-66 max-w-106 flex-shrink-0 min-h-150 mx-2 border-dashed border-2 rounded-lg border-gray-700 flex flex-col items-center"
         :class="{ 'bg-blue-100 border-blue-400': draggedOverColumn === 'todo' }"
         @dragover="handleColumnDragOver($event, 'todo')"
         @dragleave="handleColumnDragLeave"
@@ -108,7 +107,7 @@ function handleModalSave(updatedTask: Task) {
       </div>
       <!-- Doing Column -->
       <div
-        class="basis-1/3 min-h-150 mx-2 border-dashed border-2 rounded-lg border-gray-700 flex flex-col items-center"
+        class="basis-1/3 sm:w-66 md:w-66 max-w-106 flex-shrink-0 min-h-150 mx-2 border-dashed border-2 rounded-lg border-gray-700 flex flex-col items-center"
         :class="{ 'bg-blue-100 border-blue-400': draggedOverColumn === 'doing' }"
         @dragover="handleColumnDragOver($event, 'doing')"
         @dragleave="handleColumnDragLeave"
@@ -138,7 +137,7 @@ function handleModalSave(updatedTask: Task) {
       </div>
       <!-- Done Column -->
       <div
-        class="basis-1/3 min-h-150 mx-2 border-dashed border-2 rounded-lg border-gray-700 flex flex-col items-center"
+        class="basis-1/3 sm:w-66 md:w-66 max-w-106 flex-shrink-0 min-h-150 mx-2 border-dashed border-2 rounded-lg border-gray-700 flex flex-col items-center"
         :class="{ 'bg-blue-100 border-blue-400': draggedOverColumn === 'done' }"
         @dragover="handleColumnDragOver($event, 'done')"
         @dragleave="handleColumnDragLeave"

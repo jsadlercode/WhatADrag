@@ -10,4 +10,7 @@ To Do
 * [x] setup a board using flex
 * [x] setup a board using grid
 * [x] setup cards with data
-* [ ] setup drag and drop composable
+* [x] setup drag and drop composable
+
+Bonus
+* [ ] Save/Read to/from local

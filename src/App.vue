@@ -6,9 +6,10 @@ import GridBoard from './components/GridBoard.vue';
 import { useTaskManagement } from './composables/useTaskManagement';
 
 const boardIsFlex = ref(true);
+const newTaskTitle = ref('');
 
 // Initialize task management with sample data
-const { tasks, updateTask } = useTaskManagement([
+const { tasks, updateTask, addTask } = useTaskManagement([
   { id: 1, title: 'Task 1', status: 'todo', position: 0, description: 'This is task 1' },
   { id: 2, title: 'Task 2', status: 'doing', position: 0, description: 'This is task 2' },
   { id: 3, title: 'Task 3', status: 'done', position: 0, description: 'This is task 3' },
@@ -16,6 +17,18 @@ const { tasks, updateTask } = useTaskManagement([
   { id: 5, title: 'Task 5', status: 'doing', position: 1, description: 'This is task 5' },
   { id: 6, title: 'Task 6', status: 'done', position: 1, description: 'This is task 6' }
 ]);
+
+function handleAddTask() {
+  if (newTaskTitle.value.trim()) {
+    addTask({
+      title: newTaskTitle.value.trim(),
+      description: '',
+      status: 'todo',
+      position: 0 // This will be recalculated by addTask
+    });
+    newTaskTitle.value = ''; // Clear the input after adding
+  }
+}
 
 </script>
 
@@ -26,9 +39,25 @@ const { tasks, updateTask } = useTaskManagement([
     </h1>
   </header>
 
-  <main>
-    <div class="container mx-auto">
-      <div class="button-group min-h-10 my-3">
+  <main class="">
+    <div class="w-full">
+      <div class="button-group min-h-10 my-3 mx-15 flex justify-between items-center">
+        <div class="flex items-center">
+          <input
+            type="text"
+            v-model="newTaskTitle"
+            placeholder="Add new task here"
+            class="input mr-2 w-64"
+            @keyup.enter="handleAddTask"
+          >
+          <button
+            class="btn btn-sm btn-success"
+            @click="handleAddTask"
+            :disabled="!newTaskTitle.trim()"
+          >
+            Add
+          </button>
+        </div>
         <button
           class="btn btn-primary"
           @click="boardIsFlex = !boardIsFlex"
@@ -37,7 +66,7 @@ const { tasks, updateTask } = useTaskManagement([
           <span v-else>Change to Flex</span>
         </button>
       </div>
-      <div class="container min-h-150 bg-gray-500">
+      <div class="w-full min-h-150">
         <div v-if="boardIsFlex">
           <FlexBoard
             :tasks="tasks"

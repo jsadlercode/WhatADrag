@@ -1,4 +1,4 @@
-import { ref, computed } from 'vue';
+import { ref, computed, watch } from 'vue';
 
 export interface Task {
   id: number;
@@ -8,8 +8,56 @@ export interface Task {
   position: number;
 }
 
+const STORAGE_KEY = 'whatadrag-tasks';
+
 export function useTaskManagement(initialTasks: Task[] = []) {
-  const tasks = ref<Task[]>(initialTasks);
+  // Load tasks from localStorage or use initial tasks
+  const loadTasksFromStorage = (): Task[] => {
+    try {
+      const stored = localStorage.getItem(STORAGE_KEY);
+      if (stored) {
+        const parsedTasks = JSON.parse(stored);
+        // Validate that the parsed data is an array of tasks
+        if (Array.isArray(parsedTasks) && parsedTasks.every(isValidTask)) {
+          return parsedTasks;
+        }
+      }
+    } catch (error) {
+      console.warn('Failed to load tasks from localStorage:', error);
+    }
+    return initialTasks;
+  };
+
+  // Type guard to validate task structure
+  const isValidTask = (obj: any): obj is Task => {
+    return (
+      typeof obj === 'object' &&
+      typeof obj.id === 'number' &&
+      typeof obj.title === 'string' &&
+      typeof obj.description === 'string' &&
+      typeof obj.status === 'string' &&
+      typeof obj.position === 'number'
+    );
+  };
+
+  // Save tasks to localStorage
+  const saveTasksToStorage = (tasksToSave: Task[]) => {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(tasksToSave));
+    } catch (error) {
+      console.error('Failed to save tasks to localStorage:', error);
+    }
+  };
+  const tasks = ref<Task[]>(loadTasksFromStorage());
+
+   // Watch for changes and save to localStorage
+  watch(
+    tasks,
+    (newTasks) => {
+      saveTasksToStorage(newTasks);
+    },
+    { deep: true }
+  );
 
   // Computed properties for tasks by status
   const todoTasks = computed(() =>
